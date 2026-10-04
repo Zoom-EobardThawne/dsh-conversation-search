@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Build output and distributable archives
+dist/
+*.tgz
+
+# Throwaway DSH homes created by the verification scripts
+.dsh-test/
+.dsh-pack-test/
+
+# Editor / OS noise
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
