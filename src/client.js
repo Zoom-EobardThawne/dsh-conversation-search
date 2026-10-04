@@ -1,5 +1,5 @@
 /**
- * dsh-conversation-search — Client half.
+ * @dev_zf/dsh-conversation-search — Client half.
  *
  * Adds an in-conversation find bar to the current Session transcript:
  *

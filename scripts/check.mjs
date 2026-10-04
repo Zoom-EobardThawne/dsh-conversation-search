@@ -20,7 +20,10 @@ if (manifest.peerDependencies?.['@deepseek-ai/dsh'] !== undefined) {
 }
 
 const patch = await readFile(join(root, 'cordis.patch.yml'), 'utf8')
-if (!patch.includes('name: ' + manifest.name)) problems.push('cordis.patch.yml: insert row must name the package')
+// A YAML plain scalar cannot start with "@", so a scoped package name is quoted
+// in the patch. Compare unquoted values instead of the raw text.
+const patchNames = [...patch.matchAll(/^\s*name:\s*["']?([^"'\s]+)["']?\s*$/gm)].map(match => match[1])
+if (!patchNames.includes(manifest.name)) problems.push('cordis.patch.yml: insert row must name the package')
 
 const artifactPath = join(root, 'lib', 'client.js')
 const artifact = await readFile(artifactPath, 'utf8')

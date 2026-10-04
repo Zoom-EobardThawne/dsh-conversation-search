@@ -1,4 +1,4 @@
-# dsh-conversation-search
+# @dev_zf/dsh-conversation-search
 
 DSH 插件：**在当前会话的对话内容里搜索关键词，并把匹配位置定位（滚动）到眼前。**
 
@@ -13,11 +13,11 @@ DSH 插件：**在当前会话的对话内容里搜索关键词，并把匹配�
 
 ```sh
 # 从 npm 安装（推荐）
-dsh plugin --profile desktop add dsh-conversation-search
+dsh plugin --profile desktop add @dev_zf/dsh-conversation-search
 
 # 从本地目录或 tarball 安装
 dsh plugin --profile desktop add /path/to/dsh-conversation-search
-dsh plugin --profile desktop add /path/to/dsh-conversation-search-0.1.0.tgz
+dsh plugin --profile desktop add /path/to/dev_zf-dsh-conversation-search-0.1.0.tgz
 ```
 
 安装后**重启 DSH**（新 bundle 需要重新组装 profile），再刷新页面。
@@ -133,8 +133,8 @@ dsh-conversation-search/
 ### 验收判据：克隆后能构建出完整插件
 
 ```sh
-node scripts/build-client.mjs    # built lib/client.js (50041 bytes, id=dsh-conversation-search)
-node scripts/check.mjs           # ok: dsh-conversation-search@0.1.0 — lib/client.js 50041 bytes
+node scripts/build-client.mjs    # built lib/client.js (50065 bytes, id=@dev_zf/dsh-conversation-search)
+node scripts/check.mjs           # ok: @dev_zf/dsh-conversation-search@0.1.0 — lib/client.js 50065 bytes
 node tests/engine.test.mjs       # ok: engine behaviour checks passed
 ```
 
@@ -157,7 +157,7 @@ node tests/engine.test.mjs      # 引擎行为测试（自建 DOM 桩）
 ## 卸载
 
 ```sh
-dsh plugin --profile desktop remove dsh-conversation-search
+dsh plugin --profile desktop remove @dev_zf/dsh-conversation-search
 ```
 
 或从 Settings → Plugins 里禁用 / 卸载。卸载只移除本 bundle 层，不改动会话数据。

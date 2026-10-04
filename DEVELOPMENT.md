@@ -117,7 +117,7 @@ node scripts/clean-e2e.mjs                        # 停进程 + 删隔离 DSH_HO
 `package.json` 里出现该依赖、`dsh.profile.bundles` 已选中该 bundle、
 `node_modules` 下的产物就位。
 
-实测记录：`dependency: file:…/dsh-conversation-search-0.1.0.tgz`、
+实测记录：`dependency: file:…/dev_zf-dsh-conversation-search-0.1.0.tgz`、
 `bundleSelected: true`、`installedArtifact: true`；用该安装启动实例后
 浏览器验收 27/27 通过。也就是说"打包 → 全新环境安装 → 加载 → 运行"整条链路验证过。
 
@@ -146,6 +146,25 @@ node scripts/publish.mjs
 `lib/index.js`、`lib/client.js`、`cordis.patch.yml`、`src/client.js`、
 `README.md`、`INSTALL.md`、`LICENSE`。
 开发工具（`scripts/`、`tests/`）与 `DEVELOPMENT.md` 只进 Git 仓库，不进 npm 包。
+
+### 作用域包（scoped）注意事项
+
+本包是 **`@dev_zf/dsh-conversation-search`**，发布时有三点与无作用域包不同：
+
+1. **必须声明 public**。作用域包默认按 `restricted`（私有）发布，免费账号会直接失败。
+   `package.json` 已带 `"publishConfig": { "access": "public" }`，请勿删除；
+   也可在命令行显式加 `--access public`。
+2. **scope 必须归发布者所有**。`@dev_zf` 是发布账号 `dev_zf` 的**个人作用域**，
+   `npm whoami` 返回 `dev_zf` 时即可直接发布；若换成别的 scope，需要先建同名组织。
+3. **`cordis.patch.yml` 里的包名必须加引号**。YAML 的裸标量不能以 `@` 开头，
+   所以写 `name: "@dev_zf/dsh-conversation-search"`；
+   `scripts/check.mjs` 会比较"去引号后的值"，因此带引号不会导致校验失败。
+
+打包文件名也会随作用域变化：`@dev_zf/dsh-conversation-search` 打出的 tarball 是
+`dev_zf-dsh-conversation-search-0.1.0.tgz`（`@` 去掉、`/` 换成 `-`），
+安装后在 profile 里落在 `node_modules/@dev_zf/dsh-conversation-search/`。
+`scripts/verify-pack.mjs` 与 `scripts/e2e-instance.mjs` 都直接从 `package.json`
+读包名，改名后无需再改脚本。
 
 ## 诊断句柄
 

@@ -1,5 +1,5 @@
 {
-  "name": "dsh-conversation-search",
+  "name": "@dev_zf/dsh-conversation-search",
   "version": "0.1.0",
   "description": "In-conversation keyword search for DSH: find text in the current Session transcript, highlight every match, and jump to its exact position",
   "type": "module",

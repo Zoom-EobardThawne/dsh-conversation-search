@@ -4,7 +4,7 @@
 
 | 方式 | 适合 | 命令 |
 |---|---|---|
-| npm registry | 联网环境、多台机器 | `dsh plugin --profile desktop add dsh-conversation-search` |
+| npm registry | 联网环境、多台机器 | `dsh plugin --profile desktop add @dev_zf/dsh-conversation-search` |
 | 本地目录 | 想改代码，或直接从源码使用 | `dsh plugin --profile desktop add <仓库目录>` |
 | tarball | 离线 / 内网分发 | `dsh plugin --profile desktop add <file.tgz>` |
 
@@ -18,10 +18,10 @@
 ## 方式一：从 npm 安装
 
 ```sh
-dsh plugin --profile desktop add dsh-conversation-search
+dsh plugin --profile desktop add @dev_zf/dsh-conversation-search
 
 # 锁定版本
-dsh plugin --profile desktop add dsh-conversation-search@0.1.0
+dsh plugin --profile desktop add @dev_zf/dsh-conversation-search@0.1.0
 ```
 
 ## 方式二：从本地目录安装
@@ -38,13 +38,13 @@ dsh plugin --profile desktop add /path/to/dsh-conversation-search
 在本仓库先打包：
 
 ```sh
-node scripts/pack.mjs          # 产出 dist/dsh-conversation-search-0.1.0.tgz
+node scripts/pack.mjs          # 产出 dist/dev_zf-dsh-conversation-search-0.1.0.tgz
 ```
 
 把 `.tgz` 传到目标机后：
 
 ```sh
-dsh plugin --profile desktop add /path/to/dsh-conversation-search-0.1.0.tgz
+dsh plugin --profile desktop add /path/to/dev_zf-dsh-conversation-search-0.1.0.tgz
 ```
 
 ## 让插件生效
@@ -60,8 +60,8 @@ dsh plugin --profile desktop add /path/to/dsh-conversation-search-0.1.0.tgz
 
 | # | 操作 | 期望 |
 |---|---|---|
-| 1 | `dsh plugin --profile desktop list dsh-conversation-search --depth 0` | 列出该 bundle，版本 0.1.0 |
-| 2 | 重启 DSH，打开 Web 界面，F12 → Console | 无 `dsh-conversation-search` / `ModuleLoader` 相关报错 |
+| 1 | `dsh plugin --profile desktop list @dev_zf/dsh-conversation-search --depth 0` | 列出该 bundle，版本 0.1.0 |
+| 2 | 重启 DSH，打开 Web 界面，F12 → Console | 无 `@dev_zf/dsh-conversation-search` / `ModuleLoader` 相关报错 |
 | 3 | Console 输入 `dshConversationSearch.diagnose()` | 返回对象，含 `scroller` / `rows` / `entries` |
 | 4 | 打开一个**有消息的**会话，按 `Ctrl+F` 搜一个词 | 出现 `n/m` 计数；命中黄色高亮、当前匹配蓝色、整条消息一圈定位框 |
 | 5 | 连点 `Enter` 到底再点一次 | 从最后一个循环回第 1 个 |
@@ -73,7 +73,7 @@ dsh plugin --profile desktop add /path/to/dsh-conversation-search-0.1.0.tgz
 ## 卸载
 
 ```sh
-dsh plugin --profile desktop remove dsh-conversation-search
+dsh plugin --profile desktop remove @dev_zf/dsh-conversation-search
 ```
 
 或从 Settings → Plugins 里禁用 / 卸载。卸载只移除本 bundle 层，

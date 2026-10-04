@@ -1,5 +1,5 @@
 /**
- * Live-page verification for dsh-conversation-search, driven the way a user
+ * Live-page verification for @dev_zf/dsh-conversation-search, driven the way a user
  * drives it.
  *
  * A blank Session in a fresh profile keeps its composer in the shell's inert

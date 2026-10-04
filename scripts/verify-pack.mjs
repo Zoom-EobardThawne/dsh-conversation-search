@@ -13,7 +13,11 @@ import { fileURLToPath } from 'node:url'
 import { dshCli } from './dsh-paths.mjs'
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)))
-const tarball = resolve(process.argv[2] ?? join(root, 'dist', 'dsh-conversation-search-0.1.0.tgz'))
+const pkg = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'))
+// A scoped package packs as `scope-name-version.tgz` and installs under
+// `node_modules/@scope/name`, so both paths are derived from the real name.
+const packedName = `${pkg.name.replace(/^@/, '').replace('/', '-')}-${pkg.version}.tgz`
+const tarball = resolve(process.argv[2] ?? join(root, 'dist', packedName))
 if (!existsSync(tarball)) throw new Error(`tarball not found: ${tarball}`)
 
 const home = resolve(process.argv[3] ?? join(dirname(root), '.dsh-pack-test'))
@@ -48,22 +52,30 @@ console.log(`installing ${tarball} into ${profile}`)
 await run(['plugin', '--profile', profileName, 'add', tarball])
 
 const manifest = JSON.parse(await readFile(join(profile, 'package.json'), 'utf8'))
-const patch = await readFile(join(profile, 'cordis.patch.yml'), 'utf8')
-const linked = existsSync(join(profile, 'node_modules', 'dsh-conversation-search', 'lib', 'client.js'))
-const installed = manifest.dependencies?.['dsh-conversation-search']
-const bundled = manifest.dsh?.profile?.bundles?.includes('dsh-conversation-search') === true
+const installedDir = join(profile, 'node_modules', ...pkg.name.split('/'))
+const linked = existsSync(join(installedDir, 'lib', 'client.js'))
+const installed = manifest.dependencies?.[pkg.name]
+const bundled = manifest.dsh?.profile?.bundles?.includes(pkg.name) === true
+// The patch DSH will actually parse must name this package. It is quoted because
+// a YAML plain scalar cannot start with "@", so this also proves the quoting
+// survived packing and installation.
+const shippedPatch = existsSync(join(installedDir, 'cordis.patch.yml'))
+  ? await readFile(join(installedDir, 'cordis.patch.yml'), 'utf8')
+  : ''
+const patchNamesPlugin = shippedPatch.includes(pkg.name)
 
 console.log(JSON.stringify({
   dependency: installed,
   bundleSelected: bundled,
-  patchMentionsPlugin: patch.includes('dsh-conversation-search'),
+  patchMentionsPlugin: patchNamesPlugin,
   installedArtifact: linked,
 }, null, 2))
 
 const problems = []
-if (typeof installed !== 'string' || !installed.includes('dsh-conversation-search')) problems.push('dependency missing from the profile manifest')
+if (typeof installed !== 'string' || installed.length === 0) problems.push('dependency missing from the profile manifest')
 if (bundled !== true) problems.push('bundle not selected in dsh.profile.bundles')
 if (linked !== true) problems.push('lib/client.js is not present under the profile node_modules')
+if (patchNamesPlugin !== true) problems.push('the installed cordis.patch.yml does not name the package')
 if (problems.length > 0) {
   for (const problem of problems) console.error(`FAIL ${problem}`)
   process.exit(1)

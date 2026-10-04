@@ -57,8 +57,9 @@ if (!existsSync(join(testHome, '.credentials.yaml')) && existsSync(credentials))
   await copyFile(credentials, join(testHome, '.credentials.yaml'))
 }
 
+const pluginName = JSON.parse(await readFile(join(root, 'package.json'), 'utf8')).name
 const manifest = JSON.parse(await readFile(join(profile, 'package.json'), 'utf8'))
-if (!manifest.dsh.profile.bundles.includes('dsh-conversation-search')) {
+if (!manifest.dsh.profile.bundles.includes(pluginName)) {
   await run(dsh, ['plugin', '--profile', 'web', 'add', root], { env })
   console.error(`provisioned ${profile}`)
 }

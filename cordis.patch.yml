@@ -1,6 +1,7 @@
-# dsh-conversation-search bundle patch: inserts this package's client half into the
-# web plugin roster. The client bundle is declared by package.json's `dsh.client`
-# and served by @deepseek-ai/dsh-client-modules under /plugins.
+# @dev_zf/dsh-conversation-search bundle patch: inserts this package's client half
+# into the web plugin roster. The client bundle is declared by package.json's
+# `dsh.client` and served by @deepseek-ai/dsh-client-modules under /plugins.
+# The name is quoted because a YAML plain scalar cannot start with "@".
 - insert:
     - id: ui-conversation-search
-      name: dsh-conversation-search
+      name: "@dev_zf/dsh-conversation-search"
